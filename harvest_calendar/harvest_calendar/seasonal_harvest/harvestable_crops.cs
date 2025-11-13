@@ -59,9 +59,10 @@ internal class HarvestableCrops
     // Return the time remaining for the given crop to become harvestable.
     protected int getTimeUntilHarvest(Crop crop)
     {
-        // sum days in all future phases and add days in current phase
+        // sum days in all future phases and add days (remaining) in current phase
         int daysInRemainingPhases = crop.phaseDays.GetRange(crop.currentPhase.Value + 1, crop.phaseDays.Count).Sum(); ;
+        int daysRemainingInCurrentPhase = crop.phaseDays[crop.currentPhase.Value] - crop.dayOfCurrentPhase.Value;
 
-        return daysInRemainingPhases + crop.dayOfCurrentPhase.Value;
+        return daysInRemainingPhases + daysRemainingInCurrentPhase;
     }
 }
