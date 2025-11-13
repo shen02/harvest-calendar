@@ -7,11 +7,11 @@ namespace HarvestCalendar.DailyHarvestInfo;
 // Invariant: GameLocation is one of: Farm, IslandWest, Greenhouse.
 internal sealed class DailyHarvest
 {
-    private Dictionary<FarmableLocationNames, List<CropWithQuantity>> dailyHarvest;
+    private Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>> dailyHarvest;
 
     public DailyHarvest(FarmableLocationNames locationNames)
     {
-        dailyHarvest = new Dictionary<FarmableLocationNames, List<CropWithQuantity>>();
+        dailyHarvest = new Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>>();
         dictInit(locationNames);
     }
 
@@ -23,7 +23,7 @@ internal sealed class DailyHarvest
 
         for (int i = 0; i < names.Length; i++)
         {
-            dailyHarvest.Add(names[i], new List<CropWithQuantity>());
+            dailyHarvest.Add(names[i], new HashSet<CropWithQuantity>());
         }
     }
 
@@ -38,7 +38,7 @@ internal sealed class DailyHarvest
         dailyHarvest[locationName].Remove(crop);
     }
 
-    public List<CropWithQuantity> getCropListByLocation(FarmableLocationNames location)
+    public HashSet<CropWithQuantity> getCropListByLocation(FarmableLocationNames location)
     {
         return dailyHarvest[location];
     }
