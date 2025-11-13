@@ -3,6 +3,8 @@ using HarvestCalendar.DataTypes;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using Microsoft.Xna.Framework;
+using Force.DeepCloner;
+using System.Reflection.Metadata;
 
 namespace HarvestCalendar.SeasonHarvestInfo;
 // HarvestableCrops is an object that maps each day in a season to a list of crops that are harvestable on that given day. 
@@ -35,7 +37,25 @@ internal class HarvestableCrops
         return allPlantedCrops;
     }
 
+    // Returns a FarmableLocatoinNames object (Farm, Greenhouse, IslandWest) accoding to the given GameLocation.
+    // Invariant: The given GameLocatoin will be one of Farm, Greenhouse, and IslandWest.
+    protected FarmableLocationNames getLocationNameByGameLocation(GameLocation location)
+    {
+        // Really not great design due to usage of string constants but, for now, oh well.
+        switch (location.Name)
+        {
+            case "Farm":
+                return FarmableLocationNames.Farm;
+            case "Greenhouse":
+                return FarmableLocationNames.Greenhouse;
+            case "IslandWest":
+                return FarmableLocationNames.IslandWest;
+            default:
+                return FarmableLocationNames.Farm;
+        }
+    }
 
+    // Return the time remaining for the given crop to become harvestable.
     protected int getCropHarvestTime(Crop crop)
     {
         // sum from crop.currentPhase.Value (exclusive) to end and then plus daysInPhase
