@@ -27,9 +27,14 @@ internal sealed class DailyHarvest
         }
     }
 
-    public void AddCrop(FarmableLocationNames locationName, CropWithQuantity crop)
+    public void addCrop(FarmableLocationNames locationName, CropWithQuantity crop)
     {
         dailyHarvest[locationName].Add(crop);
+    }
+
+    public void addCrop(FarmableLocationNames locationName, HashSet<CropWithQuantity> crop)
+    {
+        dailyHarvest[locationName].Concat(crop);
     }
 
     // Most likely won't be used in the context of this mod but created for data stucture design
