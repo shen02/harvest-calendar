@@ -1,4 +1,5 @@
 using HarvestCalendar.DataTypes;
+using xTile.Dimensions;
 
 namespace HarvestCalendar.DailyHarvestInfo;
 
@@ -7,34 +8,19 @@ namespace HarvestCalendar.DailyHarvestInfo;
 // Invariant: GameLocation is one of: Farm, IslandWest, Greenhouse.
 internal sealed class DailyHarvest
 {
-    private Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>> dailyHarvest;
+    public Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>> dailyHarvest;
 
     public DailyHarvest()
     {
         dailyHarvest = new Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>>();
-        dictInit();
     }
 
-    // Fills this.dailyHarvest with the current farmable location names each mapped to an empty list of CropWithQuantity. 
-    private void dictInit()
+    public void addCrops(FarmableLocationNames locationName, HashSet<CropWithQuantity> crop)
     {
-        // convert this.farmableLocationNames into a fixed length array. 
-        FarmableLocationNames[] names = (FarmableLocationNames[])Enum.GetValues(typeof(FarmableLocationNames));
-
-        for (int i = 0; i < names.Length; i++)
-        {
-            dailyHarvest.Add(names[i], new HashSet<CropWithQuantity>());
-        }
-    }
-
-    public void addCrop(FarmableLocationNames locationName, CropWithQuantity crop)
-    {
-        dailyHarvest[locationName].Add(crop);
-    }
-
-    public void addCrop(FarmableLocationNames locationName, HashSet<CropWithQuantity> crop)
-    {
-        dailyHarvest[locationName].Concat(crop);
+        if (dailyHarvest.ContainsKey(locationName))
+            dailyHarvest[locationName].UnionWith(crop);
+        else
+            dailyHarvest.Add(locationName, crop);
     }
 
     // Most likely won't be used in the context of this mod but created for data stucture design
