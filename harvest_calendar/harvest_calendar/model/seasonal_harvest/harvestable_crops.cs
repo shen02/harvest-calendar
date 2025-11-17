@@ -124,6 +124,10 @@ internal class HarvestableCrops
     // Invariant: the last two members of the crop.phaseDays are always [9999, ''] to prevent further phase progression after the crop is ready for harvest.
     protected int getTimeUntilHarvest(Crop crop)
     {
+        // If the plant is regrowing but not yet ready for re-harvesr
+        if (crop.RegrowsAfterHarvest() && crop.fullyGrown.Value && !crop.Dirt.readyForHarvest())
+            return crop.dayOfCurrentPhase.Value;
+
         // sum days in all future phases and add days in current phase
         int daysInRemainingPhases = crop.phaseDays.GetRange(crop.currentPhase.Value + 1, crop.phaseDays.Count - 1 - crop.currentPhase.Value - 1).Sum();
         // The conditional statement is a temporary workarount for the reset of currentPhase's value after the crop is fully grown.
