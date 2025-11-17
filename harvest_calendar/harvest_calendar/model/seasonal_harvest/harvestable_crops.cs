@@ -94,6 +94,9 @@ internal class HarvestableCrops
                                                             group crop by crop.netSeedIndex into sameCropList
                                                             select new CropWithQuantity(sameCropList.ToList()[0], sameCropList.Count())).ToHashSet();
 
+            // Sort the CropWithQuantity objects by descending quantities
+            harvestableCropSet = harvestableCropSet.OrderByDescending(crop => crop.getQuantity()).ToHashSet();
+
             cropsByHarvestDay.Add(cropGroup.Key, harvestableCropSet);
         }
 
