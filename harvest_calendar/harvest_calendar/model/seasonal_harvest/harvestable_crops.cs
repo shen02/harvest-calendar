@@ -29,7 +29,8 @@ internal class HarvestableCrops
     }
 
     // TODO: need abstraction + rewrite
-    public Dictionary<int, DailyHarvest> getAllCropsByDate()
+    // TODO: Island mapping still does not work for when island is not unlockde (null crops present)
+    protected Dictionary<int, DailyHarvest> getAllCropsByDate()
     {
         Dictionary<int, DailyHarvest> allCropsByDate = new Dictionary<int, DailyHarvest>();
 
@@ -78,7 +79,7 @@ internal class HarvestableCrops
 
     // Takes a list of Crops, sort into a hashset according to crop type and quantity, then map to their respective number of days until harvest.
     // Note: this function kind of does a few too many things. Might be able to abstract?
-    public Dictionary<int, HashSet<CropWithQuantity>> mapByHarvestDate(List<Crop> cropList)
+    protected Dictionary<int, HashSet<CropWithQuantity>> mapByHarvestDate(List<Crop> cropList)
     {
         Dictionary<int, HashSet<CropWithQuantity>> cropsByHarvestDay = new Dictionary<int, HashSet<CropWithQuantity>>();
 
@@ -101,7 +102,7 @@ internal class HarvestableCrops
     }
 
     // Returns a list of all planted, living crops in the given locatoin
-    public List<Crop> getAllCropsInLocation(GameLocation location)
+    protected List<Crop> getAllCropsInLocation(GameLocation location)
     {
         List<Crop> allPlantedCrops = new List<Crop>();
 
@@ -119,7 +120,7 @@ internal class HarvestableCrops
 
     // Return the time remaining for the given crop to become harvestable.
     // Invariant: the last two members of the crop.phaseDays are always [9999, ''] to prevent further phase progression after the crop is ready for harvest.
-    public int getTimeUntilHarvest(Crop crop)
+    protected int getTimeUntilHarvest(Crop crop)
     {
         // sum days in all future phases and add days in current phase
         int daysInRemainingPhases = crop.phaseDays.GetRange(crop.currentPhase.Value + 1, crop.phaseDays.Count - 1 - crop.currentPhase.Value - 1).Sum();
