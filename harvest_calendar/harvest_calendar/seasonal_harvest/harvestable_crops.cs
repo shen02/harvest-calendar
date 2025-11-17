@@ -8,6 +8,8 @@ using StardewValley.Menus;
 using StardewModdingAPI;
 using System.ComponentModel.DataAnnotations;
 using Netcode;
+using xTile.Dimensions;
+using xTile;
 
 
 //TODO : Improve function scope + finish class functions
@@ -22,48 +24,56 @@ internal class HarvestableCrops
     public HarvestableCrops()
     {
         harvestableCrops = new Dictionary<int, DailyHarvest>();
-        //this.getAllCropsByDate();
+        this.getAllCropsByDate();
     }
 
     // Dictionary<int, Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>>
-    protected void getAllCropsByDate()
+    public void getAllCropsByDate()
     {
         List<Crop> farmCrops = getAllCropsInLocation(Game1.getFarm());
         List<Crop> islandCrops = getAllCropsInLocation(Game1.getLocationFromName("IslandWest"));
-        List<Crop> greenHouseCrops = getAllCropsInLocation(Game1.getLocationFromName("IslandWest"));
+        List<Crop> greenHouseCrops = getAllCropsInLocation(Game1.getLocationFromName("Greenhouse"));
 
-        Dictionary<int, HashSet<CropWithQuantity>> farmSet = groupByHarvestDate(farmCrops);
-        Dictionary<int, HashSet<CropWithQuantity>> islandSet = groupByHarvestDate(islandCrops);
-        Dictionary<int, HashSet<CropWithQuantity>> greenHouseSet = groupByHarvestDate(greenHouseCrops);
+        Dictionary<int, HashSet<CropWithQuantity>> farmSet = mapByHarvestDate(farmCrops);
+
+        Dictionary<int, HashSet<CropWithQuantity>> islandSet = islandCrops.Count > 0 ? mapByHarvestDate(islandCrops) : new Dictionary<int, HashSet<CropWithQuantity>>();
+
+        Dictionary<int, HashSet<CropWithQuantity>> greenHouseSet = greenHouseCrops.Count > 0 ? mapByHarvestDate(greenHouseCrops) : new Dictionary<int, HashSet<CropWithQuantity>>();
 
         for (int i = 1; i <= 28; i++)
         {
+            bool hasHarvest = false;
             DailyHarvest daily = new DailyHarvest();
 
             if (farmSet.ContainsKey(i))
             {
-                daily.addCrop(FarmableLocationNames.Farm, farmSet[i]);
+                daily.addCrops(FarmableLocationNames.Farm, farmSet[i]);
+                hasHarvest = true;
             }
-
 
             if (islandSet.ContainsKey(i))
             {
-                daily.addCrop(FarmableLocationNames.IslandWest, farmSet[i]);
+                daily.addCrops(FarmableLocationNames.IslandWest, islandSet[i]);
+                hasHarvest = true;
             }
-
 
             if (greenHouseSet.ContainsKey(i))
             {
-                daily.addCrop(FarmableLocationNames.Greenhouse, farmSet[i]);
+                daily.addCrops(FarmableLocationNames.Greenhouse, greenHouseSet[i]);
+                hasHarvest = true;
             }
 
-            harvestableCrops.Add(i, daily);
-        }
+            if (hasHarvest)
+            {
+                harvestableCrops.Add(i, daily);
+            }
 
+        }
     }
 
     // Takes a list of Crops, sort into a hashset according to crop type and quantity, then map to their respective number of days until harvest.
-    public Dictionary<int, HashSet<CropWithQuantity>> groupByHarvestDate(List<Crop> cropList)
+    // Note: this function kind of does a few too many things. Might be able to abstract?
+    protected Dictionary<int, HashSet<CropWithQuantity>> mapByHarvestDate(List<Crop> cropList)
     {
         Dictionary<int, HashSet<CropWithQuantity>> cropsByHarvestDay = new Dictionary<int, HashSet<CropWithQuantity>>();
 
@@ -86,28 +96,25 @@ internal class HarvestableCrops
     }
 
     // Returns a list of all planted, living crops in the given locatoin
-    public List<Crop> getAllCropsInLocation(GameLocation location)
+    protected List<Crop> getAllCropsInLocation(GameLocation location)
     {
-
-        // What we start with: list with all planted crop in a location
-        // What we end with: A hashset of CropwithQuantity mapped to the locations mapped to the harvest dates
         List<Crop> allPlantedCrops = new List<Crop>();
 
         // condition acquired from decompiled game source v1.6
         foreach (KeyValuePair<Vector2, TerrainFeature> pair in location.terrainFeatures.Pairs)
         {
-            if (pair.Value is HoeDirt { crop: not null })
+            // crop is not null; crop is able to produce harvest; crop is not weed.
+            if (pair.Value is HoeDirt { crop: not null, crop.indexOfHarvest: not null, crop.indexOfHarvest.Value: not "0" })
             {
                 allPlantedCrops.Add((pair.Value as HoeDirt).crop);
             }
         }
-
         return allPlantedCrops;
     }
 
     // Return the time remaining for the given crop to become harvestable.
     // Invariant: the last two members of the crop.phaseDays are always [9999, ''] to prevent further phase progression after the crop is ready for harvest.
-    public int getTimeUntilHarvest(Crop crop)
+    protected int getTimeUntilHarvest(Crop crop)
     {
         // sum days in all future phases and add days in current phase
         int daysInRemainingPhases = crop.phaseDays.GetRange(crop.currentPhase.Value + 1, crop.phaseDays.Count - 1 - crop.currentPhase.Value - 1).Sum();
@@ -132,11 +139,5 @@ internal class HarvestableCrops
             default:
                 return FarmableLocationNames.Farm;
         }
-    }
-
-
-    public void Main(string[] args)
-    {
-
     }
 }

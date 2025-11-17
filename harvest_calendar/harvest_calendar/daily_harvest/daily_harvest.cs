@@ -1,5 +1,4 @@
 using HarvestCalendar.DataTypes;
-using xTile.Dimensions;
 
 namespace HarvestCalendar.DailyHarvestInfo;
 
@@ -8,7 +7,7 @@ namespace HarvestCalendar.DailyHarvestInfo;
 // Invariant: GameLocation is one of: Farm, IslandWest, Greenhouse.
 internal sealed class DailyHarvest
 {
-    public Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>> dailyHarvest;
+    private Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>> dailyHarvest;
 
     public DailyHarvest()
     {
@@ -21,6 +20,12 @@ internal sealed class DailyHarvest
             dailyHarvest[locationName].UnionWith(crop);
         else
             dailyHarvest.Add(locationName, crop);
+    }
+
+    // Note: kind of a weird inverse-design
+    public void addCrop(FarmableLocationNames locationName, HashSet<CropWithQuantity> crop)
+    {
+        addCrops(locationName, new HashSet<CropWithQuantity>(crop));
     }
 
     // Most likely won't be used in the context of this mod but created for data stucture design
