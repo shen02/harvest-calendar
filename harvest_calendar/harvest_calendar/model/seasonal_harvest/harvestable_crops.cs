@@ -9,7 +9,7 @@ namespace HarvestCalendar.Model.SeasonHarvestInfo;
 internal class HarvestableCrops
 {
     // invariant: harvestableCrops.size is equal to the number of days in the game's seasons.
-    public Dictionary<int, DailyHarvest> harvestableCrops = new Dictionary<int, DailyHarvest>();
+    protected Dictionary<int, DailyHarvest> harvestableCrops = new Dictionary<int, DailyHarvest>();
     protected int daysInSeason = 28;
 
     public HarvestableCrops()
