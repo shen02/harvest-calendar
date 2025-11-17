@@ -5,6 +5,7 @@ using StardewValley;
 using Microsoft.Xna.Framework;
 using HarvestCalendar.Model.DataTypes;
 using HarvestCalendar.Model.DailyHarvestInfo;
+using HarvestCalendar.Model.Translator;
 
 namespace HarvestCalendar.View.Menu;
 
@@ -12,7 +13,7 @@ internal class HarvestCalendarMenu : Billboard
 {
   protected const string BackgroundTexturePath = "LooseSprites\\Billboard";
 
-  Dictionary<int, Dictionary<FarmableLocationNames, List<Tuple<string, int>>>> harvestData;
+  public Dictionary<int, Dictionary<FarmableLocationNames, List<Tuple<string, int>>>> harvestData;
 
   public HarvestCalendarMenu()
   {
@@ -61,13 +62,13 @@ internal class HarvestCalendarMenu : Billboard
     {
       if (harvestData.ContainsKey(date))
       {
-        //string harvestIndex = harvestData[date].First().Value.First().Item1;
+        string harvestIndex = harvestData[date].First().Value.First().Item1;
 
-        var metadata = ItemRegistry.GetMetadata("22");
+        var metadata = ItemRegistry.GetMetadata(harvestIndex);
         var data = metadata.GetParsedData();
 
         Texture2D texture = data.GetTexture();
-        b.Draw(texture, new Rectangle(this.calendarDays[date].bounds.X + 32, this.calendarDays[date].bounds.Y + 50, this.calendarDays[date].bounds.Width / 2, this.calendarDays[date].bounds.Height / 2), data.GetSourceRect(), Color.White);
+        b.Draw(texture, new Rectangle(this.calendarDays[date - 1].bounds.X + 32, this.calendarDays[date - 1].bounds.Y + 50, this.calendarDays[date - 1].bounds.Width / 2, this.calendarDays[date - 1].bounds.Height / 2), data.GetSourceRect(), Color.White);
       }
     }
   }
