@@ -135,7 +135,7 @@ internal class HarvestCalendarMenu : Billboard
     {
       int icon = 0;
 
-      Utility.drawBoldText(b, item.Key.ToString(), Game1.dialogueFont, new Vector2(X + totalPadding, Y + totalPadding + (line * lineHeight) + (line * iconDistance / 2)), Color.Black, 0.5f);
+      Utility.drawBoldText(b, item.Key.ToString(), Game1.dialogueFont, new Vector2(X + totalPadding, Y + (10 + totalPadding) + (line * lineHeight) + (line * iconDistance / 2)), Color.Black, 0.5f);
 
       line += 1;
 
@@ -145,12 +145,12 @@ internal class HarvestCalendarMenu : Billboard
         var data = metadata.GetParsedData();
 
         int icon_x = X + totalPadding + (icon * (iconWidth + iconDistance));
-        int icon_y = Y + totalPadding + (line * lineHeight) + (line * iconDistance / 3);
+        int icon_y = Y + totalPadding + (line * lineHeight) + (line * iconDistance / 2);
 
         Texture2D texture = data.GetTexture();
         b.Draw(texture, new Rectangle(icon_x, icon_y, 30, 30), data.GetSourceRect(), Color.White);
 
-        Utility.drawTinyDigits(crop.Item2, b, new Vector2(icon_x + iconWidth, icon_y + iconWidth), 1.5f, 0, Color.White);
+        Utility.drawTinyDigits(crop.Item2, b, new Vector2(icon_x + (float)(iconWidth * 0.75), icon_y + (float)(iconWidth * 0.75)), 1.5f, 0, Color.White);
 
         if (icon < iconPerLine - 1)
         {
