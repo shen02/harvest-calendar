@@ -9,7 +9,7 @@ namespace HarvestCalendar.Model.SeasonHarvestInfo;
 internal class HarvestableCrops
 {
     // invariant: harvestableCrops.size is equal to the number of days in the game's seasons.
-    protected Dictionary<int, DailyHarvest> harvestableCrops = new Dictionary<int, DailyHarvest>();
+    public Dictionary<int, DailyHarvest> harvestableCrops = new Dictionary<int, DailyHarvest>();
     protected int daysInSeason = 28;
 
     public HarvestableCrops()
@@ -39,11 +39,11 @@ internal class HarvestableCrops
 
         Dictionary<int, HashSet<CropWithQuantity>> farmSet = mapByHarvestDate(farmCrops);
 
-        Dictionary<int, HashSet<CropWithQuantity>> islandSet = islandCrops.Count > 0 ? mapByHarvestDate(islandCrops) : new Dictionary<int, HashSet<CropWithQuantity>>();
+        // Dictionary<int, HashSet<CropWithQuantity>> islandSet = islandCrops.Count > 0 ? mapByHarvestDate(islandCrops) : new Dictionary<int, HashSet<CropWithQuantity>>();
 
         Dictionary<int, HashSet<CropWithQuantity>> greenHouseSet = greenHouseCrops.Count > 0 ? mapByHarvestDate(greenHouseCrops) : new Dictionary<int, HashSet<CropWithQuantity>>();
 
-        for (int i = 1; i <= daysInSeason; i++)
+        for (int i = 0; i <= daysInSeason; i++)
         {
             bool hasHarvest = false;
             DailyHarvest daily = new DailyHarvest();
@@ -53,12 +53,12 @@ internal class HarvestableCrops
                 daily.addCrops(FarmableLocationNames.Farm, farmSet[i]);
                 hasHarvest = true;
             }
-
-            if (islandSet.ContainsKey(i))
-            {
-                daily.addCrops(FarmableLocationNames.IslandWest, islandSet[i]);
-                hasHarvest = true;
-            }
+            /*
+                        if (islandSet.ContainsKey(i))
+                        {
+                            daily.addCrops(FarmableLocationNames.IslandWest, islandSet[i]);
+                            hasHarvest = true;
+                        }*/
 
             if (greenHouseSet.ContainsKey(i))
             {
@@ -68,7 +68,7 @@ internal class HarvestableCrops
 
             if (hasHarvest)
             {
-                harvestableCrops.Add(i, daily);
+                allCropsByDate.Add(i, daily);
             }
 
         }
@@ -78,7 +78,7 @@ internal class HarvestableCrops
 
     // Takes a list of Crops, sort into a hashset according to crop type and quantity, then map to their respective number of days until harvest.
     // Note: this function kind of does a few too many things. Might be able to abstract?
-    protected Dictionary<int, HashSet<CropWithQuantity>> mapByHarvestDate(List<Crop> cropList)
+    public Dictionary<int, HashSet<CropWithQuantity>> mapByHarvestDate(List<Crop> cropList)
     {
         Dictionary<int, HashSet<CropWithQuantity>> cropsByHarvestDay = new Dictionary<int, HashSet<CropWithQuantity>>();
 
@@ -101,7 +101,7 @@ internal class HarvestableCrops
     }
 
     // Returns a list of all planted, living crops in the given locatoin
-    protected List<Crop> getAllCropsInLocation(GameLocation location)
+    public List<Crop> getAllCropsInLocation(GameLocation location)
     {
         List<Crop> allPlantedCrops = new List<Crop>();
 
@@ -119,11 +119,12 @@ internal class HarvestableCrops
 
     // Return the time remaining for the given crop to become harvestable.
     // Invariant: the last two members of the crop.phaseDays are always [9999, ''] to prevent further phase progression after the crop is ready for harvest.
-    protected int getTimeUntilHarvest(Crop crop)
+    public int getTimeUntilHarvest(Crop crop)
     {
         // sum days in all future phases and add days in current phase
         int daysInRemainingPhases = crop.phaseDays.GetRange(crop.currentPhase.Value + 1, crop.phaseDays.Count - 1 - crop.currentPhase.Value - 1).Sum();
-        int daysRemainingInCurrentPhase = crop.phaseDays[crop.currentPhase.Value] - crop.dayOfCurrentPhase.Value;
+        // The conditional statement is a temporary workarount for the reset of currentPhase's value after the crop is fully grown.
+        int daysRemainingInCurrentPhase = crop.currentPhase.Value > crop.phaseDays.Count - 2 ? 0 : crop.phaseDays[crop.currentPhase.Value] - crop.dayOfCurrentPhase.Value;
 
         return daysInRemainingPhases + daysRemainingInCurrentPhase;
     }
