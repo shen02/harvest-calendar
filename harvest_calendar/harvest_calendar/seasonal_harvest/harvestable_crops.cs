@@ -9,17 +9,25 @@ namespace HarvestCalendar.SeasonHarvestInfo;
 internal class HarvestableCrops
 {
     // invariant: harvestableCrops.size is equal to the number of days in the game's seasons.
-    public Dictionary<int, DailyHarvest> harvestableCrops;
+    protected Dictionary<int, DailyHarvest> harvestableCrops = new Dictionary<int, DailyHarvest>();
+    protected int daysInSeason = 28;
 
     public HarvestableCrops()
     {
-        harvestableCrops = new Dictionary<int, DailyHarvest>();
-        this.getAllCropsByDate();
+        harvestableCrops = getAllCropsByDate();
     }
 
-    // DTODO: need abstraction + rewrite
-    public void getAllCropsByDate()
+    public HarvestableCrops(int daysInSeason)
     {
+        this.daysInSeason = daysInSeason;
+        harvestableCrops = getAllCropsByDate();
+    }
+
+    // TODO: need abstraction + rewrite
+    public Dictionary<int, DailyHarvest> getAllCropsByDate()
+    {
+        Dictionary<int, DailyHarvest> allCropsByDate = new Dictionary<int, DailyHarvest>();
+
         List<Crop> farmCrops = getAllCropsInLocation(Game1.getFarm());
         List<Crop> islandCrops = getAllCropsInLocation(Game1.getLocationFromName("IslandWest"));
         List<Crop> greenHouseCrops = getAllCropsInLocation(Game1.getLocationFromName("Greenhouse"));
@@ -30,7 +38,7 @@ internal class HarvestableCrops
 
         Dictionary<int, HashSet<CropWithQuantity>> greenHouseSet = greenHouseCrops.Count > 0 ? mapByHarvestDate(greenHouseCrops) : new Dictionary<int, HashSet<CropWithQuantity>>();
 
-        for (int i = 1; i <= 28; i++)
+        for (int i = 1; i <= daysInSeason; i++)
         {
             bool hasHarvest = false;
             DailyHarvest daily = new DailyHarvest();
@@ -59,6 +67,8 @@ internal class HarvestableCrops
             }
 
         }
+
+        return allCropsByDate;
     }
 
     // Takes a list of Crops, sort into a hashset according to crop type and quantity, then map to their respective number of days until harvest.
