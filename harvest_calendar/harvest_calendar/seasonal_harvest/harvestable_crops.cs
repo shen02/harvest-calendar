@@ -1,18 +1,8 @@
 using HarvestCalendar.DailyHarvestInfo;
 using HarvestCalendar.DataTypes;
-using HarvestCalendar.Menu;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using Microsoft.Xna.Framework;
-using StardewValley.Menus;
-using StardewModdingAPI;
-using System.ComponentModel.DataAnnotations;
-using Netcode;
-using xTile.Dimensions;
-using xTile;
-
-
-//TODO : Improve function scope + finish class functions
 
 namespace HarvestCalendar.SeasonHarvestInfo;
 // HarvestableCrops is an object that maps each day in a season to a list of crops that are harvestable on that given day. 
@@ -27,7 +17,7 @@ internal class HarvestableCrops
         this.getAllCropsByDate();
     }
 
-    // Dictionary<int, Dictionary<FarmableLocationNames, HashSet<CropWithQuantity>>
+    // DTODO: need abstraction + rewrite
     public void getAllCropsByDate()
     {
         List<Crop> farmCrops = getAllCropsInLocation(Game1.getFarm());
