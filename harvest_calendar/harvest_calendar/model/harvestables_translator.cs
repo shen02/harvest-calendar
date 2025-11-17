@@ -14,7 +14,7 @@ internal static class HarvestablesTranslator
         Dictionary<int, Dictionary<FarmableLocationNames, List<Tuple<string, int>>>> translatedCrops = new Dictionary<int, Dictionary<FarmableLocationNames, List<Tuple<string, int>>>>();
 
         // The dictionary object mapping days until harvest with their harvests
-        Dictionary<int, DailyHarvest> cropsByDate = harvestableCrops.getAllCropsByDate();
+        Dictionary<int, DailyHarvest> cropsByDate = harvestableCrops.getAllHarvestableCrops();
 
         foreach (KeyValuePair<int, DailyHarvest> daysUntilHarvest in cropsByDate)
         {
