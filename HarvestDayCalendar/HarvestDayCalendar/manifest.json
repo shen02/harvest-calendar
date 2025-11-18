@@ -1,9 +1,0 @@
-{
-    "Name": "Harvest Day Calendar",
-    "Author": "az",
-    "Version": "1.0.0",
-    "Description": "A calendar that shows the anticipated harvest days of all of your crops!",
-    "UniqueID": "az.harvest_day",
-    "EntryDll": "harvest_day.dll",
-    "UpdateKeys": []
-}
