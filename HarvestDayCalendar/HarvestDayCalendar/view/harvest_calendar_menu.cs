@@ -157,7 +157,6 @@ internal class HarvestCalendarMenu : Billboard
           line += 1;
           icon = 0;
         }
-
       }
       line += 1;
     }
@@ -190,6 +189,7 @@ internal class HarvestCalendarMenu : Billboard
     drawCalendarHeader(b);
     drawCalendarGrids(b);
     drawHarvestIcons(b);
+    drawMouse(b);
   }
 }
 
