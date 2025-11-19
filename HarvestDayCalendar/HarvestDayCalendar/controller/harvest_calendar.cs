@@ -16,7 +16,7 @@ internal sealed class harvestCalendar : Mod
     {
         if (Context.IsWorldReady)
             if (_menuTrigger.JustPressed())
-                Game1.activeClickableMenu = Game1.activeClickableMenu == null || Game1.activeClickableMenu.GetType() != typeof(HarvestCalendarMenu) ? new HarvestCalendarMenu() : null;
+                Game1.activeClickableMenu = Game1.activeClickableMenu.GetType() == typeof(HarvestCalendarMenu) ? null : new HarvestCalendarMenu();
     }
 }
 
