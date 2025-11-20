@@ -1,6 +1,3 @@
-> **_\*Gasp!\*_ You found my Forgejo repo!**  
-This is a mirror-backup repository for [Harvest-Day-Calendar](https://github.com/shen02/StardewValley-Harvest-Day-Calendar) and frequent manual sync cannot be guaranteed. If you find something  out-of-date, please be redirected to the repository linked above.
-
 # Harvest Day Calendar
 
 <a href="https://ibb.co/n8NNLVYz"><img src="https://i.ibb.co/3Y99C8jB/harvest-day-calendar.png" alt="harvest-day-calendar" border="0" /></a>
