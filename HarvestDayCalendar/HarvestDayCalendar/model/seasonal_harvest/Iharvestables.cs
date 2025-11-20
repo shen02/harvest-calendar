@@ -3,7 +3,7 @@ using HarvestCalendar.Model.HarvestableWithQuantity;
 using HarvestCalendar.Model.DataTypes;
 using StardewValley;
 
-public interface IHarvestable<T, R> where T : Crop where R : IHarvestableWithQuantity<T>
+public interface IHarvestable<T, R> where T : Crop where R : HarvestableWithQuantity<T>
 {
 
     // Returns the already-made dictionary of all harvestables mapped to their time until harvest. 

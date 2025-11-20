@@ -8,7 +8,7 @@ namespace HarvestCalendar.Model.DailyHarvests;
 // Daily harvest represents a dictionary that maps a list of harvestable crops with their quantities to the GameLocation to which they are planted.
 // The object construtor takes in an enumeration of locationNames, which represents all farmable location in the game's given context.
 // Invariant: GameLocation is one of: Farm, IslandWest, Greenhouse.
-public class DailyHarvest<T, R> where T : Crop, INetObject<NetFields> where R : IHarvestableWithQuantity<T>
+public class DailyHarvest<T, R> where T : Crop, INetObject<NetFields> where R : HarvestableWithQuantity<T>
 {
     protected Dictionary<FarmableLocationNames, HashSet<R>> dailyHarvest;
 
