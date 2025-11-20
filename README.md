@@ -18,7 +18,7 @@ This programme serves as an injected modification to the game [Stardew Valley](h
 
 Its purpose is to collect data on all player-planted crops among the game's 3 farmable locations, compute the crops' respective dates of harvest within the season, then render the data onto an in-game calendar of 28 days.
 
-![Harvest-Components.png](https://i.postimg.cc/YS6kHdcW/Harvest-Components.png)
+![Harvest-Components.png](https://camo.githubusercontent.com/e1895cb1b9c42e6e51e74cf50cfddeead7cd4a1a3c08f3c4c02652cdf90ab845/68747470733a2f2f692e706f7374696d672e63632f776a3774514353372f486172766573742d436f6d706f6e656e74732e706e67)
 
 ## Design
 
