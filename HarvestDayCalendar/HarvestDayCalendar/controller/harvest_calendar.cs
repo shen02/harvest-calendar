@@ -30,6 +30,9 @@ internal sealed class harvestCalendar : Mod
         if (configMenu is null)
             return;
 
+        // Read the current existing user settings
+        menuTriggerSettings = this.Helper.ReadConfig<HarvestCalendarConfig>();
+
         configMenu.Register(
             mod: ModManifest,
             reset: () => menuTriggerSettings = new HarvestCalendarConfig(),
